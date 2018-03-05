@@ -36,19 +36,11 @@ The chapters in this book go through the installation and configuration steps as
 is introduced.
 
 ## Related Products
-* [SQL Server 2017 Developer’s Guide](https://www.packtpub.com/big-data-and-business-intelligence/sql-server-2017-developer’s-guide?
+* [SQL Server 2017 Developer’s Guide](https://www.packtpub.com/big-data-and-business-intelligence/sql-server-2017-developer’s-guide?utm_source=github&utm_medium=repository&utm_campaign=9781788476195)
 
-utm_source=github&utm_medium=repository&utm_campaign=9781788476195)
+* [Hands-On Time Series Analysis with R](https://www.packtpub.com/big-data-and-business-intelligence/hands-time-series-analysis-r?utm_source=github&utm_medium=repository&utm_campaign=9781788629157)
 
-* [Hands-On Time Series Analysis with R](https://www.packtpub.com/big-data-and-business-intelligence/hands-time-series-analysis-r?
-
-utm_source=github&utm_medium=repository&utm_campaign=9781788629157)
-
-* [SQL Server 2017 Administrator's Guide](https://www.packtpub.com/big-data-and-business-intelligence/sql-server-2017-administrators-
-
-guide?utm_source=github&utm_medium=repository&utm_campaign=9781786462541)
+* [SQL Server 2017 Administrator's Guide](https://www.packtpub.com/big-data-and-business-intelligence/sql-server-2017-administrators-guide?utm_source=github&utm_medium=repository&utm_campaign=9781786462541)
 
 ### Suggestions and Feedback
-[Click here](https://docs.google.com/forms/d/e/1FAIpQLSe5qwunkGf6PUvzPirPDtuy1Du5Rlzew23UBp2S-P3wB-GcwQ/viewform) if you have any feedback 
-
-or suggestions.
+[Click here](https://docs.google.com/forms/d/e/1FAIpQLSe5qwunkGf6PUvzPirPDtuy1Du5Rlzew23UBp2S-P3wB-GcwQ/viewform) if you have any feedback or suggestions.
