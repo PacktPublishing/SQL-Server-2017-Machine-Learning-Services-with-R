@@ -28,9 +28,9 @@ found in this book, the following software will be required:
 * SQL Server 2016 and/or SQL Server 2017 Developer or Enterprise Edition
 * SQL Server Management Studio (SSMS)
 * R IDE such as R Studio or Visual Studio 2017 with RTVS extension
-Visual Studio 2017 Community edition with the following extensions installed:
-* R Tools for Visual Studio (RTVS)
-* SQL Server Data Tools (SSDT)
+* Visual Studio 2017 Community edition with the following extensions installed:
+  * R Tools for Visual Studio (RTVS)
+  * SQL Server Data Tools (SSDT)
 * VisualStudio.com online account
 The chapters in this book go through the installation and configuration steps as the software
 is introduced.
