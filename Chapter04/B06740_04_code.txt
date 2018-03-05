@@ -1,0 +1,462 @@
+? [function]
+##############
+
+> class(mtcars);
+
+##############
+library(RODBC)
+
+connStr <- "Driver=SQL Server;Server=MsSQLGirl;
+
+Database=WideWorldImporters;trusted_connection=true";
+
+dbHandle <- odbcDriverConnect(connStr);
+
+# Define the query to be run
+
+order_query =
+
+"SELECT DATEFROMPARTS(YEAR(o.[OrderDate]),
+
+MONTH(o.[OrderDate]), 1) AS OrderMonth,
+
+    sp.[PreferredName] AS SalesPerson,
+
+    COUNT(DISTINCT o.[OrderID]) AS OrderCount,
+
+    SUM(ol.[Quantity] * ol.[UnitPrice]) AS TotalAmount
+
+FROM[Sales] .[Orders] o
+
+    INNER JOIN[Sales] .[OrderLines] ol
+
+        ON ol.[OrderID] = o.[OrderID]
+
+    INNER JOIN[Application] .[People] sp
+
+        ON sp.[PersonID] = o.[SalespersonPersonID]
+
+WHERE sp.[ValidTo] >= GETDATE()
+
+    AND o.[OrderDate] BETWEEN '20150101' AND '20151231'
+
+GROUP BY
+
+DATEFROMPARTS(YEAR(o.[OrderDate]),
+
+MONTH(o.[OrderDate]), 1),
+
+    sp.[PreferredName];"
+
+# Get the data set from SQL into the orders variable in R
+
+orders <- sqlQuery(dbHandle, order_query);
+
+orders
+
+> str(orders)
+
+##################
+
+> orders_newrows <- data.frame(
+
+    OrderMonth = c("2015-12-01", "2015-12-01"),
+
+    SalesPerson = c("Julie", "Tomaz"),
+
+    OrderCount = c(201, 2017),
+
+    TotalAmount = c(340000, 370000));
+
+ 
+
+> orders <- rbind(orders, orders_newrows);
+
+> tail(orders);
+
+> bind_rows(orders, orders_newrows, orders_newrows);
+
+> orders_discount <- data.frame(
+
+    Discount = orders$TotalAmount * 0.25)
+
+> orders <- cbind(orders, orders_ discount);
+
+> names(orders)
+
+> orders_tax <- data.frame(
+
+    RowID = seq(1:nrow(orders)),
+
+    SalesTax = orders$TotalAmount * 0.1
+
+    )
+
+> orders <- bind_cols(orders,data.frame(orders_tax));
+
+> names(orders)
+
+> mutate(orders, TotalPlusTax = TotalAmount * 0.125);
+
+> orders <- orders[, !names(orders) == "RowID"]
+
+> select(orders, -RowID);
+
+> select(orders, matches("Order"));
+
+> grep("^J.*", orders$SalesPerson);
+
+> orders[grep("^J.*", orders$SalesPerson),];
+
+> filter(orders, grepl("^J.*", SalesPerson));
+
+> orders[grep("^J.*", orders$SalesPerson),]; # base
+
+> filter(orders, grepl("^J.*", SalesPerson)); # dplyr
+
+> orders <- orders[, !names(orders) == "RowID"] # base
+
+> select(orders, -RowID); # dplyr
+
+################
+
+library(reshape)
+
+x <- data.frame(OrderMonth = orders$OrderMonth,
+
+                SalesPerson = orders$SalesPerson,
+
+                TotalAmount = orders$TotalAmount)
+
+x1 <- cast(x, OrderMonth ~ SalesPerson)
+
+names(x1)
+
+melt(x1,id=c(OrderMonth)
+
+###################
+> getwd()
+
+> png("myplot.png", width = 1000, height = 1000)
+
+ hist(orders$TotalAmount, freq = FALSE,
+     main = "Monthly Sales Person's Order Amount",
+     xlab = "Total Amount",
+     ylab = "Density")
+
+
+dev.off()
+
+#####################
+
+> plot(x = d$TotalAmount, y = d$OrderCount,
+
+main = "Monthly Orders", xlab = "Total Amount ($)",
+
+ylab = "Number of Orders", col = d$SalesPerson, pch = 19,
+
+xaxt = "n");
+
+> axis(side = 1, at = x <- signif(seq(from = 0,
+
+to =  max(orders$TotalAmount), length.out = 6), 2),
+
+labels = paste(x / 1000, "k", sep = ""));
+
+> library(ggplot2)
+
+>  qplot(x = TotalAmount, y = OrderCount, data = d,
+
+color = SalesPerson, main = "Monthly Orders");
+
+> hist(orders$TotalAmount, main = "Monthly Orders",
+
+xlab = "Total Amount ($)")
+
+> ggplot(subset(orders, SalesPerson %in% c("Amy", "Jack", "Hudson")),
+
+       aes(x = TotalAmount)) +
+
+geom_histogram() +
+
+ggtitle(label = "Monthly Orders") +
+
+xlab("Total Amount ($)")  ;
+
+###############
+
+> boxplot(TotalAmount ~ SalesPerson, data = orders,
+
+main = "Monthly Orders", xlab = "Sales Person",
+
+ylab = "Total Amount", outcol = "red");
+
+ggplot(orders,
+
+       aes( x = SalesPerson,
+
+            y = TotalAmount)) +
+
+geom_boxplot(outlier.color = "red", outlier.size = 3) +
+
+ggtitle(label = "Monthly Orders") +
+
+xlab("Sales Person") + ylab("Total Amount ($)");
+
+################
+
+library(dplyr);
+
+ 
+
+# Prepare the data set to be mapped first
+
+d <- as.data.frame(filter(orders, SalesPerson %in% c("Amy", "Hudson", "Jack")));
+
+d$SalesPerson <- factor(d$SalesPerson)
+
+library(car) # For the scatterplot function
+
+library(RColorBrewer) # For choosing color palette more easily
+
+ 
+
+# Configure the palette to use
+
+my_colors <- brewer.pal(nlevels(as.factor(d$SalesPerson)), "Set2")
+
+ 
+
+# Map the monthly orders
+
+scatterplot(TotalAmount ~ OrderMonth | SalesPerson, data = d,
+
+    xlab = "Month", ylab = "Total Amount",
+
+    main = "Monthly Orders", col = my_colors,
+
+    cex = 1.5, lwd = 3)
+
+# Use the ggplot version
+
+ggplot(data = d,
+
+       aes(x = OrderMonth, y = TotalAmount, color = SalesPerson)) +
+
+    geom_point() + geom_smooth(method = "loess") +
+
+    scale_y_continuous(label = scales::dollar) +
+
+    scale_color_brewer(palette = "Set2") +
+
+    ggtitle(label = "Monthly Orders");
+
+
+library(rpart)
+
+fit <- rpart(mpg ~ cyl + hp + wt, data = mtcars, method="anova");
+
+plot(fit);
+
+="Since the p-value of " & Fields!Pr__F_.Value & " is " & IIf(Fields!Pr__F_.Value < 0.05, "less", "greater") & " than the .05 significance level, we " & IIf(Fields!Pr__F_.Value < 0.05, "reject", "accept") & " the null hypothesis that the mean of monthly Total Amount of " & Fields!Attribute.Value & " are all equal. This means that there is " &  IIf(Fields!Pr__F_.Value < 0.05, "", "no") & " dependency between " & First(Fields!Attribute.Value, "AOV_SalesPerson") & " and Monthly Orders Total Amount"
+
+##############
+
+CREATE PROCEDURE dbo.usp_CreateMonthlySalesPlot
+
+(
+
+   @StartDate DATE = '20150101',
+
+   @EndDate DATE = '20151231'
+
+)
+
+/**********************************************************
+
+ * Purpose: Determine if Monthly Orders (Total Amount in $)
+
+ *             has no dependency on Sales Person.
+
+ * Parameter: 
+
+ * @StartDate  - Observation start date in the Orders table
+
+ * @EndDate    - Observation end date in the Orders table
+
+ * Example on how to execute:
+
+ * EXEC dbo.usp_AnalyzeOrdersUsingAnova
+
+ *       @StartDate = '20150101'
+
+ *       ,@EndDate = '20151231'
+
+ **********************************************************/
+
+AS
+
+BEGIN
+
+  
+
+   DECLARE @input_query NVARCHAR(MAX);
+
+   DECLARE @RPlot NVARCHAR(MAX);
+
+ 
+
+   -- The SQL query representing Input data set.
+
+   -- Get the monthly orders from each Sales between
+
+         specfic date and time.
+
+   SET @input_query = N'
+
+   SELECT
+
+         DATEFROMPARTS(YEAR(o.[OrderDate]),
+
+MONTH(o.[OrderDate]), 1) AS OrderMonth,
+
+         sp.[PreferredName] AS SalesPerson,
+
+         COUNT(DISTINCT o.[OrderID]) AS OrderCount,
+
+         SUM(ol.[Quantity] * ol.[UnitPrice]) AS TotalAmount
+
+   FROM [Sales] .[Orders] o
+
+         INNER JOIN [Sales] .[OrderLines] ol
+
+               ON ol.[OrderID] = o.[OrderID]
+
+         INNER JOIN [Application] .[People] sp
+
+               ON sp.[PersonID] = o.[SalespersonPersonID]
+
+   WHERE sp.[ValidTo] >= GETDATE()
+
+         AND o.[OrderDate] BETWEEN ''' +
+
+CAST(@StartDate AS VARCHAR(30)) +
+
+''' AND ''' +
+
+CAST(@EndDate AS VARCHAR(30)) + '''
+
+   GROUP BY
+
+         DATEFROMPARTS(YEAR(o.[OrderDate]), MONTH(o.[OrderDate]), 1),
+
+         sp.[PreferredName];'
+
+ 
+
+  
+
+   -- The R code that produces the plot.
+
+   SET @RPlot = N'library(ggplot2);
+
+   image_file = tempfile();
+
+   jpeg(filename = image_file, width=600, height=800);
+
+   a <- qplot(y = TotalAmount, x = OrderMonth,
+
+        data = InputDataSet,
+
+        color = SalesPerson,
+
+        facets = ~SalesPerson,
+
+        main = "Monthly Orders");
+
+   a + scale_x_date(date_labels = "%b");          
+
+   plot(a);
+
+   dev.off();
+
+   OutputDataSet <-  data.frame(
+
+data=readBin(file(image_file,"rb"),
+
+what=raw(),n=1e6));    
+
+'
+
+   EXEC sp_execute_external_script @language = N'R'
+
+         ,@script = @RPlot
+
+         ,@input_data_1 = @input_query
+
+         ,@input_data_1_name = N'InputDataSet'
+
+         ,@output_data_1_name = N'OutputDataSet'
+
+         WITH RESULT SETS (( [plot] VARBINARY(MAX)));
+
+ 
+
+END
+
+#####################
+
+ELECT
+
+    DATEFROMPARTS(YEAR(o.[OrderDate]),
+
+MONTH(o.[OrderDate]), 1) AS OrderMonth,
+
+    sp.[PreferredName] AS SalesPerson,
+
+    COUNT(DISTINCT o.[OrderID]) AS OrderCount,
+
+    SUM(ol.[Quantity] * ol.[UnitPrice]) AS TotalAmount
+
+FROM[Sales] .[Orders] o
+
+    INNER JOIN[Sales] .[OrderLines] ol
+
+        ON ol.[OrderID] = o.[OrderID]
+
+    INNER JOIN[Application] .[People] sp
+
+        ON sp.[PersonID] = o.[SalespersonPersonID]
+
+WHERE sp.[ValidTo] >= GETDATE()
+
+GROUP BY
+
+    DATEFROMPARTS(YEAR(o.[OrderDate]), MONTH(o.[OrderDate]), 1),
+
+    sp.[PreferredName];
+
+dataset$OrderMonth <- as.Date(dataset$OrderMonth);
+
+ 
+
+library(ggplot2);
+
+a <- qplot(y = TotalAmount, x = OrderMonth, data = dataset,
+
+        color = SalesPerson, facets = ~SalesPerson,
+
+        main = "Monthly Orders");
+
+a + scale_x_date(date_labels = "%b");
+
+a + scale_y_continuous(label = scales::dollar);
+
+###########
+
+# Packages needed for various samples:
+
+install.packages(c("dplyr", "ggplot2", "ggthemes", "reshape2", "e1071"), dependencies = T,
+
+lib = "C:\\Users\\jukoesma\\AppData\\Local\\Radio\\Library");
+

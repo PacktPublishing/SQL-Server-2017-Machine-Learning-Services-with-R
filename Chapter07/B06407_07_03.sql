@@ -1,0 +1,8 @@
+CREATE TABLE [dbo].[NYCTaxiModel](
+	[Model] VARBINARY(MAX) NOT NULL,
+	[AUC] FLOAT NULL,
+	[CreatedOn] DATETIME NOT NULL
+		CONSTRAINT DF_NYCTaxiModel_CreatedOn DEFAULT (GETDATE()),
+	[IsRealTimeScoring] BIT NOT NULL 
+		CONSTRAINT DF_NYCTaxiModel_IsRealTimeScoring DEFAULT (0)
+) ON [PRIMARY] 

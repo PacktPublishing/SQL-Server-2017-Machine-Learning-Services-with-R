@@ -1,0 +1,26 @@
+CREATE TABLE [dbo].[nyctaxi_sample](
+	[medallion] [varchar](50) NOT NULL,
+	[hack_license] [varchar](50) NOT NULL,
+	[vendor_id] [char](3) NULL,
+	[rate_code] [char](3) NULL,
+	[store_and_fwd_flag] [char](3) NULL,
+	[pickup_datetime] [datetime] NOT NULL,
+	[dropoff_datetime] [datetime] NULL,
+	[passenger_count] [int] NULL,
+	[trip_time_in_secs] [bigint] NULL,
+	[trip_distance] [float] NULL,
+	[pickup_longitude] [varchar](30) NULL,
+	[pickup_latitude] [varchar](30) NULL,
+	[dropoff_longitude] [varchar](30) NULL,
+	[dropoff_latitude] [varchar](30) NULL,
+	[payment_type] [char](3) NULL,
+	[fare_amount] [float] NULL,
+	[surcharge] [float] NULL,
+	[mta_tax] [float] NULL,
+	[tolls_amount] [float] NULL,
+	[total_amount] [float] NULL,
+	[tip_amount] [float] NULL,
+	[tipped] [int] NULL,
+	[tip_class] [int] NULL
+) ON [PRIMARY]
+GO
