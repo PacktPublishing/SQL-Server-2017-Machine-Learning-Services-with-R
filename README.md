@@ -30,8 +30,8 @@ found in this book, the following software will be required:
   * R Tools for Visual Studio (RTVS)
   * SQL Server Data Tools (SSDT)
 * VisualStudio.com online account
-The chapters in this book go through the installation and configuration steps as the software
-is introduced.
+
+The chapters in this book go through the installation and configuration steps as the software is introduced.
 
 ## Related Products
 * [SQL Server 2017 Developer’s Guide](https://www.packtpub.com/big-data-and-business-intelligence/sql-server-2017-developer’s-guide?utm_source=github&utm_medium=repository&utm_campaign=9781788476195)
