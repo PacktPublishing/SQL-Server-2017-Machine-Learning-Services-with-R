@@ -10,7 +10,7 @@ programming functions. With R integrated within SQL Server 2017, these developer
 
 This book gives you foundational knowledge and insights to help you understand SQL Server 2017 Machine Learning Services with R. First and foremost, the book provides practical examples on how to implement, use, and understand SQL Server and R integration in corporate 
 environments, and also provides explanations and underlying motivations. It covers installing Machine Learning Services;maintaining, 
-deploying, and managing code;and monitoring your services.
+deploying, and managing code; and monitoring your services.
 
 ## Instructions and Navigation
 All of the code is organized into folders. Each folder starts with a number followed by the application name. For example, Chapter02.
