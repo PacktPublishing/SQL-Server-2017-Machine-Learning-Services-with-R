@@ -1,7 +1,5 @@
 # SQL Server 2017 Machine Learning Services with R
-This is the code repository for [SQL Server 2017 Machine Learning Services with R](https://www.packtpub.com/big-data-and-business-
-
-intelligence/sql-server-2017-machine-learning-services-r?utm_source=github&utm_medium=repository&utm_campaign=9781787283572), published by 
+This is the code repository for [SQL Server 2017 Machine Learning Services with R](https://www.packtpub.com/big-data-and-business-intelligence/sql-server-2017-machine-learning-services-r?utm_source=github&utm_medium=repository&utm_campaign=9781787283572), published by 
 
 [Packt](https://www.packtpub.com/?utm_source=github). It contains all the supporting project files necessary to work through the book from 
 
